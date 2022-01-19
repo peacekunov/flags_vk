@@ -39,7 +39,7 @@
           });
       }
 
-      function showFullscrenAd(format) {
+      function showFullscrenAd(format = "interstitial") {
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
           .then(data => OnInterstitialClose())
           .catch(error => OnInterstitialClose());
