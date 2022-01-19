@@ -21,15 +21,28 @@
       </div>
     </div>
     <script>
-      function showRewardedAd() {}
+      showFullscrenAd("preloader");
 
-      function showFullscrenAd() {
-        vkBridge.send('VKWebAppShowNativeAds', { ad_format: "interstitial" })
-          .then(data => console.log(data.result));
-        
-        if(window.unityInstance != undefined) { 
-          window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
-        }
+      function showRewardedAd() {
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: "reward", use_waterfall: true })
+          .then(data => {
+            console.log(data);
+            if(data.result) {
+              window.unityInstance.SendMessage('AdManager', 'Reward');
+            }
+            else {
+              window.unityInstance.SendMessage('AdManager', 'RewardError');
+            }
+          })
+          .catch(error => {
+            window.unityInstance.SendMessage('AdManager', 'RewardError');
+          });
+      }
+
+      function showFullscrenAd(format) {
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
+          .then(data => OnInterstitialClose())
+          .catch(error => OnInterstitialClose());
       }
 
       function submitLeaderBoardScore(score) {}
@@ -42,171 +55,11 @@
         localStorage.removeItem("l_rv_req");
       }
 
-      // const leaderboardName = "HightScore";
-
-      // window.onload = () => {
-      //   window.focus();
-      // }
-
-      // document.addEventListener('fullscreenchange', (event) => {
-      //   window.focus();
-      // });
-
-      // window.addEventListener('touchstart', (event) => {
-      //   window.focus();
-      // });
-
-      // YaGames
-      //   .init({
-      //       adv: {
-      //         onAdvClose: wasShown => {
-      //           window.focus();
-      //         }
-      //       }
-      //   })
-      //   .then(ysdk => {
-      //     console.log('Yandex SDK initialized');
-      //     window.ysdk = ysdk;
-
-      //     if(ysdk.deviceInfo.isMobile() || ysdk.deviceInfo.isTablet()) {
-      //       window.addEventListener('blur', (event) => {
-      //         window.focus();
-      //       });
-
-      //       if(window.unityInstance != undefined) {
-      //         window.unityInstance.SendMessage('GameController', 'SetIsMobileOrTabletTrue');
-      //       }
-      //     }
-            
-      //     initBottomBanner();
-      //     showFullscrenAd();
-      //   });
-
-      // function initBottomBanner() {
-      //   switch(window.ysdk.deviceInfo.type) {
-      //     default:
-      //     case "desktop":
-      //       window.bottomBannerBlockId = "R-A-1383179-15";
-      //       setHeightsOfElements("90px");
-      //       break;
-      //     case "mobile":
-      //       window.bottomBannerBlockId = "R-A-1383179-16";
-      //       setHeightsOfElements("50px");
-      //       break;
-      //     case "tablet":
-      //       window.bottomBannerBlockId = "R-A-1383179-23";
-      //       setHeightsOfElements("90px");
-      //       break;
-      //   }
-
-      //   window.yaContextCb.push(() => {
-      //     renderBottomBanner();
-      //   });
-
-      //   setInterval(() => {
-      //     renderBottomBanner();
-      //   }, 30000);
-      // }
-
-      // function setHeightsOfElements(bannerHeight) {
-      //   document.querySelector("#unity-canvas").style.height = "calc(100% - " + bannerHeight + ")";
-      //   document.querySelector("#bottom_banner_container").style.height = bannerHeight;
-      // }
-
-      // function showFullscrenAd() {
-      //   window.ysdk.adv.showFullscreenAdv({
-      //     callbacks: {
-      //       onClose: function(wasShown) {
-      //         window.focus();
-      //         if(window.unityInstance != undefined) { 
-      //           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
-      //         }
-      //       },
-      //       onError: function(error) {
-      //         if(window.unityInstance != undefined) {
-      //           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
-      //         }
-      //       },
-      //       onOffline: function(error) {
-      //         if(window.unityInstance != undefined) {
-      //           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
-      //         }
-      //       }
-      //     }
-      //   });
-      // }
-
-      // function showRewardedAd() {
-      //   ysdk.adv.showRewardedVideo({
-      //     callbacks: {
-      //       onOpen: () => {
-      //         console.log('Video ad open.');
-      //       },
-      //       onRewarded: () => {
-      //         console.log('Rewarded!');
-      //         window.unityInstance.SendMessage('AdManager', 'Reward');
-      //       },
-      //       onClose: () => {
-      //         console.log('Video ad closed.');
-      //         window.focus();
-      //       }, 
-      //       onError: (e) => {
-      //         console.log('Error while open video ad:', e);
-      //         window.unityInstance.SendMessage('AdManager', 'RewardError');
-      //         window.focus();
-      //       }
-      //     }
-      //   });
-      // }
-
-      // function renderBottomBanner() {
-      //   Ya.Context.AdvManager.render({
-      //     renderTo: 'yandex_rtb_bottom_banner',
-      //     blockId: window.bottomBannerBlockId
-      //   });
-      // }
-
-      // function submitLeaderBoardScore(score) {
-      //   var leaderboard;
-      //   window.ysdk.getLeaderboards()
-      //     .then(lb => {
-      //       leaderboard = lb;
-      //       return lb.getLeaderboardPlayerEntry(leaderboardName);
-      //     })
-      //     .then(res => {
-      //       if(score > res.score) {
-      //         leaderboard.setLeaderboardScore(leaderboardName, score);
-      //       }
-      //     })
-      //     .catch(err => {
-      //       if (err.code === 'LEADERBOARD_PLAYER_NOT_PRESENT') {
-      //         leaderboard.setLeaderboardScore(leaderboardName, score);
-      //       }
-      //     });
-      // }
-
-      // function isMobileOrTablet() {
-      //   if(window.ysdk != undefined) {
-      //     return window.ysdk.deviceInfo.isMobile() || window.ysdk.deviceInfo.isTablet();
-      //   }
-      //   return false;
-      // }
-
-      // function reviewPopup() {
-      //   window.ysdk.feedback.canReview()
-      //     .then(({ value, reason }) => {
-      //       if (value) {
-      //         ysdk.feedback.requestReview()
-      //           .then(({ feedbackSent }) => {
-      //             window.focus();
-      //           });
-      //       } else {
-      //         localStorage.removeItem("l_rv_req");
-      //         console.log(reason);
-      //         showFullscrenAd();
-      //       }
-      //     });
-      // }
+      function OnInterstitialClose() {
+        if(window.unityInstance != undefined) { 
+          window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
+        }
+      }
 
       const canvas = document.querySelector("#unity-canvas");
       const loadingCover = document.querySelector("#loading-cover");
