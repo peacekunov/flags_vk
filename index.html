@@ -21,7 +21,8 @@
       </div>
     </div>
     <script>
-      showFullscrenAd("preloader");
+      vkBridge.send('VKWebAppInit')
+        .then(showFullscrenAd("preloader"));
 
       function showRewardedAd() {
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: "reward", use_waterfall: true })
