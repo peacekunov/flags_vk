@@ -24,7 +24,8 @@
       function showRewardedAd() {}
 
       function showFullscrenAd() {
-        vkBridge.send('VKWebAppShowNativeAds', { ad_format: "interstitial" });
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: "interstitial" })
+          .then(data => console.log(data.result));
         
         if(window.unityInstance != undefined) { 
           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
