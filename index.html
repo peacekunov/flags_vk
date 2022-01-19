@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | FunWithFlags</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body style="text-align: center">
+    <canvas id="unity-canvas" style="background: #231F20"></canvas>
+    <div id="bottom_banner_container">
+      <!-- <div id="yandex_rtb_bottom_banner"></div> -->
+    </div>
+    <div id="loading-cover" style="display:none;">
+      <div id="unity-loading-bar">
+        <div id="unity-progress-bar-empty" style="display: none;">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <script>
+      function showRewardedAd() {}
+
+      function showFullscrenAd() {
+        if(window.unityInstance != undefined) { 
+          window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
+        }
+      }
+
+      function submitLeaderBoardScore(score) {}
+
+      function isMobileOrTablet() {
+        return false;
+      }
+
+      function reviewPopup() {
+        localStorage.removeItem("l_rv_req");
+      }
+
+      // const leaderboardName = "HightScore";
+
+      // window.onload = () => {
+      //   window.focus();
+      // }
+
+      // document.addEventListener('fullscreenchange', (event) => {
+      //   window.focus();
+      // });
+
+      // window.addEventListener('touchstart', (event) => {
+      //   window.focus();
+      // });
+
+      // YaGames
+      //   .init({
+      //       adv: {
+      //         onAdvClose: wasShown => {
+      //           window.focus();
+      //         }
+      //       }
+      //   })
+      //   .then(ysdk => {
+      //     console.log('Yandex SDK initialized');
+      //     window.ysdk = ysdk;
+
+      //     if(ysdk.deviceInfo.isMobile() || ysdk.deviceInfo.isTablet()) {
+      //       window.addEventListener('blur', (event) => {
+      //         window.focus();
+      //       });
+
+      //       if(window.unityInstance != undefined) {
+      //         window.unityInstance.SendMessage('GameController', 'SetIsMobileOrTabletTrue');
+      //       }
+      //     }
+            
+      //     initBottomBanner();
+      //     showFullscrenAd();
+      //   });
+
+      // function initBottomBanner() {
+      //   switch(window.ysdk.deviceInfo.type) {
+      //     default:
+      //     case "desktop":
+      //       window.bottomBannerBlockId = "R-A-1383179-15";
+      //       setHeightsOfElements("90px");
+      //       break;
+      //     case "mobile":
+      //       window.bottomBannerBlockId = "R-A-1383179-16";
+      //       setHeightsOfElements("50px");
+      //       break;
+      //     case "tablet":
+      //       window.bottomBannerBlockId = "R-A-1383179-23";
+      //       setHeightsOfElements("90px");
+      //       break;
+      //   }
+
+      //   window.yaContextCb.push(() => {
+      //     renderBottomBanner();
+      //   });
+
+      //   setInterval(() => {
+      //     renderBottomBanner();
+      //   }, 30000);
+      // }
+
+      // function setHeightsOfElements(bannerHeight) {
+      //   document.querySelector("#unity-canvas").style.height = "calc(100% - " + bannerHeight + ")";
+      //   document.querySelector("#bottom_banner_container").style.height = bannerHeight;
+      // }
+
+      // function showFullscrenAd() {
+      //   window.ysdk.adv.showFullscreenAdv({
+      //     callbacks: {
+      //       onClose: function(wasShown) {
+      //         window.focus();
+      //         if(window.unityInstance != undefined) { 
+      //           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
+      //         }
+      //       },
+      //       onError: function(error) {
+      //         if(window.unityInstance != undefined) {
+      //           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
+      //         }
+      //       },
+      //       onOffline: function(error) {
+      //         if(window.unityInstance != undefined) {
+      //           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
+      //         }
+      //       }
+      //     }
+      //   });
+      // }
+
+      // function showRewardedAd() {
+      //   ysdk.adv.showRewardedVideo({
+      //     callbacks: {
+      //       onOpen: () => {
+      //         console.log('Video ad open.');
+      //       },
+      //       onRewarded: () => {
+      //         console.log('Rewarded!');
+      //         window.unityInstance.SendMessage('AdManager', 'Reward');
+      //       },
+      //       onClose: () => {
+      //         console.log('Video ad closed.');
+      //         window.focus();
+      //       }, 
+      //       onError: (e) => {
+      //         console.log('Error while open video ad:', e);
+      //         window.unityInstance.SendMessage('AdManager', 'RewardError');
+      //         window.focus();
+      //       }
+      //     }
+      //   });
+      // }
+
+      // function renderBottomBanner() {
+      //   Ya.Context.AdvManager.render({
+      //     renderTo: 'yandex_rtb_bottom_banner',
+      //     blockId: window.bottomBannerBlockId
+      //   });
+      // }
+
+      // function submitLeaderBoardScore(score) {
+      //   var leaderboard;
+      //   window.ysdk.getLeaderboards()
+      //     .then(lb => {
+      //       leaderboard = lb;
+      //       return lb.getLeaderboardPlayerEntry(leaderboardName);
+      //     })
+      //     .then(res => {
+      //       if(score > res.score) {
+      //         leaderboard.setLeaderboardScore(leaderboardName, score);
+      //       }
+      //     })
+      //     .catch(err => {
+      //       if (err.code === 'LEADERBOARD_PLAYER_NOT_PRESENT') {
+      //         leaderboard.setLeaderboardScore(leaderboardName, score);
+      //       }
+      //     });
+      // }
+
+      // function isMobileOrTablet() {
+      //   if(window.ysdk != undefined) {
+      //     return window.ysdk.deviceInfo.isMobile() || window.ysdk.deviceInfo.isTablet();
+      //   }
+      //   return false;
+      // }
+
+      // function reviewPopup() {
+      //   window.ysdk.feedback.canReview()
+      //     .then(({ value, reason }) => {
+      //       if (value) {
+      //         ysdk.feedback.requestReview()
+      //           .then(({ feedbackSent }) => {
+      //             window.focus();
+      //           });
+      //       } else {
+      //         localStorage.removeItem("l_rv_req");
+      //         console.log(reason);
+      //         showFullscrenAd();
+      //       }
+      //     });
+      // }
+
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingCover = document.querySelector("#loading-cover");
+      const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+      const progressBarFull = document.querySelector("#unity-progress-bar-full");
+      const spinner = document.querySelector('.spinner');
+
+      const loaderUrl = "Build/WebGL.loader.js";
+
+      const config = {
+        dataUrl: "Build/WebGL.data.unityweb",
+        frameworkUrl: "Build/WebGL.framework.js.unityweb",
+        codeUrl: "Build/WebGL.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "FunWithFlags",
+        productVersion: "1.1.0",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      };
+
+      loadingCover.style.display = "";
+
+      const script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          console.time('LOADING');
+          spinner.style.display = "none";
+          progressBarEmpty.style.display = "";
+          progressBarFull.style.width = `${100 * progress}%`;
+        }).then((unityInstance) => {
+          console.timeEnd('LOADING');
+          window.unityInstance = unityInstance;
+          loadingCover.style.display = "none";
+        });
+      }
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
