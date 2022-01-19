@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | FunWithFlags</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   </head>
   <body style="text-align: center">
     <canvas id="unity-canvas" style="background: #231F20"></canvas>
@@ -23,6 +24,8 @@
       function showRewardedAd() {}
 
       function showFullscrenAd() {
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: "interstitial" });
+        
         if(window.unityInstance != undefined) { 
           window.unityInstance.SendMessage('AdManager', 'InterstitialClose');
         }
