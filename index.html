@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | FunWithFlags</title>
+    <title>Unity WebGL Player | {{{ PRODUCT_NAME }}}</title>
     <link rel="stylesheet" href="style.css">
-<!--     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script> -->
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   </head>
   <body style="text-align: center">
-    <canvas id="unity-canvas" style="background: #231F20"></canvas>
+    <canvas id="unity-canvas" style="background: {{{ BACKGROUND_FILENAME ? 'url(\'Build/' + BACKGROUND_FILENAME.replace(/'/g, '%27') + '\') center / cover' : BACKGROUND_COLOR }}}"></canvas>
     <div id="bottom_banner_container">
       <!-- <div id="yandex_rtb_bottom_banner"></div> -->
     </div>
@@ -21,19 +21,7 @@
       </div>
     </div>
     <script>
-      window.onload = () => {
-        window.focus();
-      }
-      
-      document.addEventListener('fullscreenchange', (event) => {
-        window.focus();
-      });
-
-      window.addEventListener('touchstart', (event) => {
-        window.focus();
-      });
-//       vkBridge.send('VKWebAppInit')
-//         .then(showFullscrenAd("preloader"));
+      showFullscrenAd("preloader");
 
       function showRewardedAd() {
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: "reward", use_waterfall: true })
@@ -52,11 +40,9 @@
       }
 
       function showFullscrenAd(format = "interstitial") {
-//         vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
-//           .then(data => OnInterstitialClose())
-//           .catch(error => OnInterstitialClose());
-        
-        OnInterstitialClose()
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
+          .then(data => OnInterstitialClose())
+          .catch(error => OnInterstitialClose());
       }
 
       function submitLeaderBoardScore(score) {}
@@ -81,16 +67,22 @@
       const progressBarFull = document.querySelector("#unity-progress-bar-full");
       const spinner = document.querySelector('.spinner');
 
-      const loaderUrl = "Build/WebGL.loader.js";
+      const loaderUrl = "Build/{{{ LOADER_FILENAME }}}";
 
       const config = {
-        dataUrl: "Build/WebGL.data.unityweb",
-        frameworkUrl: "Build/WebGL.framework.js.unityweb",
-        codeUrl: "Build/WebGL.wasm.unityweb",
+        dataUrl: "Build/{{{ DATA_FILENAME }}}",
+        frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+        codeUrl: "Build/{{{ CODE_FILENAME }}}",
+#if MEMORY_FILENAME
+        memoryUrl: "Build/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
+#endif
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "FunWithFlags",
-        productVersion: "1.1.0",
+        companyName: "{{{ COMPANY_NAME }}}",
+        productName: "{{{ PRODUCT_NAME }}}",
+        productVersion: "{{{ PRODUCT_VERSION }}}",
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       };
@@ -100,8 +92,8 @@
       const script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
+        console.time('LOADING');
         createUnityInstance(canvas, config, (progress) => {
-          console.time('LOADING');
           spinner.style.display = "none";
           progressBarEmpty.style.display = "";
           progressBarFull.style.width = `${100 * progress}%`;
