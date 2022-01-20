@@ -22,6 +22,7 @@
     </div>
     <script
       var mobileOrTablet = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      console.log("window.location.search");
       const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get('user_id');
       console.log("userID: " + userId);
