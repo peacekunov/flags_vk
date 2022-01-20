@@ -21,12 +21,12 @@
       </div>
     </div>
     <script>
-      var mobileOrTablet = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const vkApiVersion = "5.131";
+
+      const mobileOrTablet = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get('user_id');
       const accessToken = urlParams.get('access_token');
-      console.log("userID: " + userId);
-      console.log("accessToken: " + accessToken);
 
       showFullscrenAd("preloader");
 
@@ -52,16 +52,32 @@
           .catch(error => OnInterstitialClose());
       }
 
-      function submitLeaderBoardScore(score) {}
+      function submitLeaderBoardScore(score) {
+        vkBridge.send("VKWebAppCallAPIMethod", 
+          {
+            "method": "secure.addAppEvent", 
+            "params": { "v": vkApiVersion, "access_token": accessToken, "user_id": userId, "activity_id": 2, "value": score } 
+          }
+        )
+        .then(data => console.log(data))  
+        .catch(error => console.log(error));   
+      }
 
       function showLeaderboard(score) {
-//         vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
-//           .then(data => console.log(data))  
-//           .catch(error => console.log(error));
-        
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getLeaderboard", "params": { "v": "5.131", "access_token": accessToken, "type": "score", "global": 1, "extended": 1 } })
+        if(isMobileOrTablet()) {
+          vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+            .then(data => console.log(data))  
+            .catch(error => console.log(error));          
+        } else {
+          vkBridge.send("VKWebAppCallAPIMethod", 
+            {
+              "method": "apps.getLeaderboard", 
+              "params": { "v": vkApiVersion, "access_token": accessToken, "type": "score", "global": 1, "extended": 1 } 
+            }
+          )
           .then(data => console.log(data))  
-          .catch(error => console.log(error));
+          .catch(error => console.log(error));          
+        }
       }
 
       function isMobileOrTablet() {
