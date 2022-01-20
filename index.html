@@ -21,6 +21,9 @@
       </div>
     </div>
     <script>
+      const queryString = window.location.search;
+      console.log(queryString);
+      
       var mobileOrTablet = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
       showFullscrenAd("preloader");
