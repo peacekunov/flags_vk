@@ -53,7 +53,11 @@
       function submitLeaderBoardScore(score) {}
 
       function showLeaderboard(score) {
-        vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+//         vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+//           .then(data => console.log(data))  
+//           .catch(error => console.log(error));
+        
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getLeaderboard", "params": { "type": "score", "global": 1, "extended": 1 } })
           .then(data => console.log(data))  
           .catch(error => console.log(error));
       }
