@@ -59,7 +59,7 @@
 //           .then(data => console.log(data))  
 //           .catch(error => console.log(error));
         
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getLeaderboard", "params": { "v": "5.131", "accessToken": accessToken "type": "score", "global": 1, "extended": 1 } })
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getLeaderboard", "params": { "v": "5.131", "accessToken": accessToken, "type": "score", "global": 1, "extended": 1 } })
           .then(data => console.log(data))  
           .catch(error => console.log(error));
       }
