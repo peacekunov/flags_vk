@@ -20,11 +20,11 @@
         <div class="spinner"></div>
       </div>
     </div>
-    <script>
-      const queryString = window.location.search;
-      console.log(queryString);
-      
+    <script
       var mobileOrTablet = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('user_id');
+      console.log("userID: " + userId);
 
       showFullscrenAd("preloader");
 
