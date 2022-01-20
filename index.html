@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | FunWithFlags</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+<!--     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script> -->
   </head>
   <body style="text-align: center">
     <canvas id="unity-canvas" style="background: #231F20"></canvas>
@@ -21,8 +21,8 @@
       </div>
     </div>
     <script>
-      vkBridge.send('VKWebAppInit')
-        .then(showFullscrenAd("preloader"));
+//       vkBridge.send('VKWebAppInit')
+//         .then(showFullscrenAd("preloader"));
 
       function showRewardedAd() {
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: "reward", use_waterfall: true })
@@ -41,9 +41,11 @@
       }
 
       function showFullscrenAd(format = "interstitial") {
-        vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
-          .then(data => OnInterstitialClose())
-          .catch(error => OnInterstitialClose());
+//         vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
+//           .then(data => OnInterstitialClose())
+//           .catch(error => OnInterstitialClose());
+        
+        OnInterstitialClose()
       }
 
       function submitLeaderBoardScore(score) {}
