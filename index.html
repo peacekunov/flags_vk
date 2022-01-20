@@ -21,6 +21,17 @@
       </div>
     </div>
     <script>
+      window.onload = () => {
+        window.focus();
+      }
+      
+      document.addEventListener('fullscreenchange', (event) => {
+        window.focus();
+      });
+
+      window.addEventListener('touchstart', (event) => {
+        window.focus();
+      });
 //       vkBridge.send('VKWebAppInit')
 //         .then(showFullscrenAd("preloader"));
 
