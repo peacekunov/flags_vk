@@ -21,37 +21,42 @@
       </div>
     </div>
     <script>
+      var mobileOrTablet = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
       showFullscrenAd("preloader");
 
       function showRewardedAd() {
-        // vkBridge.send('VKWebAppShowNativeAds', { ad_format: "reward", use_waterfall: true })
-        //   .then(data => {
-        //     console.log(data);
-        //     if(data.result) {
-        //       window.unityInstance.SendMessage('AdManager', 'Reward');
-        //     }
-        //     else {
-        //       window.unityInstance.SendMessage('AdManager', 'RewardError');
-        //     }
-        //   })
-        //   .catch(error => {
-        //     window.unityInstance.SendMessage('AdManager', 'RewardError');
-        //   });
-
-          window.unityInstance.SendMessage('AdManager', 'Reward');
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: "reward", use_waterfall: true })
+          .then(data => {
+            console.log(data);
+            if(data.result) {
+              window.unityInstance.SendMessage('AdManager', 'Reward');
+            }
+            else {
+              window.unityInstance.SendMessage('AdManager', 'RewardError');
+            }
+          })
+          .catch(error => {
+            window.unityInstance.SendMessage('AdManager', 'RewardError');
+          });
       }
 
       function showFullscrenAd(format = "interstitial") {
-        // vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
-        //   .then(data => OnInterstitialClose())
-        //   .catch(error => OnInterstitialClose());
-        OnInterstitialClose();
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: format })
+          .then(data => OnInterstitialClose())
+          .catch(error => OnInterstitialClose());
       }
 
       function submitLeaderBoardScore(score) {}
 
+      function showLeaderboard(score) {
+        vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+          .then(data => console.log(data))  
+          .catch(error => console.log(error));
+      }
+
       function isMobileOrTablet() {
-        return false;
+        return mobileOrTablet;
       }
 
       function reviewPopup() {
@@ -84,7 +89,7 @@
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       };
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      if (isMobileOrTablet()) {
         config.devicePixelRatio = 1;
       }
 
@@ -101,6 +106,9 @@
         }).then((unityInstance) => {
           console.timeEnd('LOADING');
           window.unityInstance = unityInstance;
+          if(isMobileOrTablet()) {
+            window.unityInstance.SendMessage('GameController', 'SetIsMobileOrTabletTrue');
+          }
           loadingCover.style.display = "none";
         });
       }
