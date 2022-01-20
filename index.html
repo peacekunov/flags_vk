@@ -56,7 +56,7 @@
         vkBridge.send("VKWebAppCallAPIMethod", 
           {
             "method": "secure.addAppEvent", 
-            "params": { "v": vkApiVersion, "access_token": accessToken, "user_id": userId, "activity_id": 2, "value": score } 
+            "params": { "v": vkApiVersion, "client_secret": accessToken, "user_id": userId, "activity_id": 2, "value": score } 
           }
         )
         .then(data => console.log(data))  
